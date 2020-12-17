@@ -1,7 +1,7 @@
 package main
 
 import (
-	"distributed-algorithms/bully-algorithm"
+	"github.com/Marvin9/distributed-algorithms/bully-algorithm"
 )
 
 func simulateBully() {

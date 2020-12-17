@@ -1,8 +1,9 @@
 package bully
 
 import (
-	"distributed-algorithms/utils"
 	"fmt"
+
+	"github.com/Marvin9/distributed-algorithms/utils"
 )
 
 // Start network simulation

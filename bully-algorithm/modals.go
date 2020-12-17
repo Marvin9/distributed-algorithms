@@ -1,9 +1,10 @@
 package bully
 
 import (
-	"distributed-algorithms/utils"
 	"fmt"
 	"sync"
+
+	"github.com/Marvin9/distributed-algorithms/utils"
 )
 
 // NodeIDType is unique id for each node
