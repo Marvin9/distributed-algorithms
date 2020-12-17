@@ -50,25 +50,27 @@ func (n *Network) bully() {
 
 	for {
 		n.Lock()
-		utils.Debug(fmt.Sprintf("Node %v is in process", n.Nodes[i].NodeID))
-		utils.Debug(n.Nodes)
+		if !n.Nodes[i].IsFailed {
+			utils.Debug(fmt.Sprintf("Node %v is in process", n.Nodes[i].NodeID))
 
-		if n.IsCoordinatorFailed() {
-			utils.Debug("Coordinator node failed")
-			n.election(i)
+			if n.IsCoordinatorFailed() {
+				utils.Debug("Coordinator node failed")
+				n.election(i)
+			}
+		} else {
+			utils.Debug(fmt.Sprintf("Node %v is failed. Skipping...", n.Nodes[i].NodeID))
 		}
-
-		i = (i + 1) % totalNodes
 		n.Unlock()
+		i = (i + 1) % totalNodes
+
+		n.State()
 
 		var in string
 		utils.Debug("Press i for input mode, c for continue...")
 		fmt.Scanf("%s", &in)
 		switch in {
 		case "i":
-			utils.Debug(n.Nodes)
 			n.Controll()
-			utils.Debug(n.Nodes)
 		case "s":
 			continue
 		}
@@ -85,10 +87,14 @@ func (n *Network) Controll() {
 	for idx := range n.Nodes {
 		if n.Nodes[idx].NodeID == nodeID {
 			if operation == 0 {
-				n.Nodes[idx].IsFailed = true
+				if !n.Nodes[idx].IsFailed {
+					n.Nodes[idx].IsFailed = true
+				}
 			} else {
-				n.Nodes[idx].IsFailed = false
-				n.election(idx)
+				if n.Nodes[idx].IsFailed {
+					n.Nodes[idx].IsFailed = false
+					n.election(idx)
+				}
 			}
 			return
 		}

@@ -51,6 +51,23 @@ func CreateNetwork() Network {
 	}
 }
 
+// State - network state
+func (n *Network) State() {
+	failedNodes := make([]NodeIDType, 0)
+	currentActiveNode := -1
+	for _, node := range n.Nodes {
+		if node.IsFailed {
+			failedNodes = append(failedNodes, node.NodeID)
+			continue
+		}
+		if node.IsCoordinator {
+			currentActiveNode = node.NodeID
+		}
+	}
+
+	utils.Debug(fmt.Sprintf("Failed nodes: %v\nCoordinator: %v", failedNodes, currentActiveNode))
+}
+
 // MakeCoordinator - will make one of node coordinator
 func (n *Network) MakeCoordinator(nodeID NodeIDType) {
 	utils.Debug(fmt.Sprintf("Making Node %v coordinator", nodeID))
